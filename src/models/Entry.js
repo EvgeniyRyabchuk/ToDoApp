@@ -3,11 +3,11 @@ class Entry {
 
     constructor(text, isChecked = false) {
         this.id = `entry_${Entry.maxId++}`;
-        this.text = text;
+        this.text = text; 
         this.isChecked = isChecked;
         this.elem = this.createElement();
     }
-
+    
     createElement() {
         const pattern = document.querySelector('#cb_pattern');
 
@@ -21,6 +21,7 @@ class Entry {
 
         return elem;
     }
+
 }
 
 export default Entry;
