@@ -1,0 +1,15 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "./roboto.scss";
+
+
+.logo {
+    height: 108px;
+    width: 100px;
+    margin: 0 auto;
+    background-size: cover;
+    background-image: url('../assets/logo.png');
+}
+
+.stock {
+    display: none;
+}
