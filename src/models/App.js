@@ -23,20 +23,43 @@ class App {
         }
     }
 
-    static getList(id)
+    static getEntryById(entryId)
+    {
+        const curList = this.getCurList(); 
+        for(let e of curList.entryList)
+        {
+            if(e.id == entryId)
+            {
+                return e; 
+            }
+        } 
+        
+    }
+
+    // получить список по id 
+    static getListById(listId)
     {
         for(let i of App.lists)
         {
-            if(i.id == id)
+            if(i.id == listId) 
                 return i; 
         }
     }
-
+    // удалить текущий выбраный список 
+    static deleteCurList()
+    {
+        for(let i = 0; i < this.lists.length; i++)
+        {
+            if(this.lists[i].id == App.cur_focus_list)
+                this.lists.splice(i, 1); 
+        }
+    }
+    // удалить список по id 
     static deleteList(id)
     {
         for(let i = 0; i < this.lists.length; i++)
         {
-            if(this.lists[i].id == id)
+            if(this.lists[i].id == id) 
                 this.lists.splice(i, 1);  
         }
     }

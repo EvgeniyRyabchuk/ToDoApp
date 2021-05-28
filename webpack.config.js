@@ -32,13 +32,14 @@ module.exports = {
     context: path.resolve(__dirname, './src'),
 
     entry: {
-        main: './index.js',
+        main: './index.js', 
     },
 
     output: {
         filename: getPattern('js'),
         path: path.resolve(__dirname, './dist'),
     },
+
 
     optimization: optimization(),
 
@@ -51,7 +52,7 @@ module.exports = {
 
         new HTMLWebpackPlugin({
             template: './index.html',
-            minify: {
+            minify: { 
                 collapseWhitespace: isProd,
             }
         }),
@@ -60,7 +61,7 @@ module.exports = {
             patterns: [
                 {
                     from: './assets/favicon.ico',
-                    to: path.resolve(__dirname, './dist'),
+                    to: path.resolve(__dirname, './dist'), 
                 },
             ],
         }),
@@ -82,12 +83,13 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
-                use: ['file-loader'],
+                use: ['file-loader'], 
             },
             {
                 test: /\.(ttf|woff|woff2)$/,
                 use: ['file-loader'],
             },
+          
         ],
     },
 };
