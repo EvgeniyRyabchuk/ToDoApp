@@ -5,11 +5,32 @@ import '..//node_modules/bootstrap/dist/js/bootstrap.bundle';
 
 
 import { Entry, List, App } from './models';
+
+
  
 restore(); 
+
+window.onload = function()
+{
+    
+}
+
+function callAlert(type, content)
+{
+    const collection = document.getElementById("alert-collection"); 
+    let alert = collection.querySelector(`.${type}`); 
+    alert.setAttribute("style", "display: flex !important"); 
+    alert.querySelector(".alert-text").textContent = content; 
+ 
+    setTimeout(() => { 
+        $(alert).fadeOut(300)
+
+    }, 3000)
+}
+
 // правильная загрузка скриптов 
 // ложная активация чекбоса 
-// плохо нажимающаяся кнопка удаления 
+// бутстрап alert не появляется 
 
 // отображение чекбоксов другого списка  
 function toggleList()
@@ -21,7 +42,7 @@ function toggleList()
     for(let i of content)
         field.append(i.elem); 
 }
-
+// создаёт и возвращает placeholder-подсказку 
 function getFieldPlaceHolder()
 {
     let div = document.createElement("div"); 
@@ -94,6 +115,7 @@ document.getElementById("save_btn").addEventListener("click", (e) =>
 {
     localStorage.setItem("lastSave", JSON.stringify(App.lists));
     localStorage.setItem("lastFocus", App.cur_focus_list);
+    callAlert("alert-success", `Данные были сохранены`);
 })
 
 function restore()
@@ -115,6 +137,7 @@ function restore()
                 restoredEntry.id = entryData.id; 
                 restoredEntry.elem = restoredEntry.createElement(); 
                 restoredEntry.elem.addEventListener("dblclick", entrySectionClick); 
+                restoredEntry.elem.addEventListener("click", del_entry); 
                 restoredEntry.elem.querySelector(".check-namer").addEventListener("blur", changeEntryName); 
                 restoredList.addEntry(restoredEntry); 
             }
@@ -131,13 +154,16 @@ document.getElementById("deleteList_btn").addEventListener("click", (e) =>
 {
     if(confirm(`Вы  действительнохотите удалить список: ${App.cur_focus_list}`))
     {
+        const deleted = App.getCurList(); 
         App.deleteCurList(); 
-        document.getElementById(App.cur_focus_list).remove(); 
-        document.getElementById("field").innerHTML = ""; 
+        document.getElementById(deleted.id).remove(); 
+        //document.getElementById("field").innerHTML = ""; 
         App.cur_focus_list = -1; 
-    
+        
         if(App.lists.length == 0)
             document.getElementById("field").append(getFieldPlaceHolder()); 
+
+        callAlert("alert-danger", `Вы удалили список ${deleted.title}`)
     }
 })
 
@@ -174,16 +200,20 @@ function entrySectionClick(e)
         entry.isChecked = target.checked; 
         console.dir(App); 
     }
-    if(target.className == "check-delete-img")
+} 
+
+function del_entry(e)
+{
+    if(e.target.className == "check-delete-img")
     {
         let id = e.target.dataset.for; 
         App.getCurList().deleteEntry(id); 
-        let elem = target.closest('.form-check'); 
+        let elem = e.target.closest('.form-check'); 
         console.log(elem)
         elem.remove(); 
         //elem.outerHTML = ""; 
     }
-} 
+}
 
 function changeEntryName(e)
 {

@@ -85,3 +85,12 @@
     cursor: pointer;
     background-image: url('../assets/bin-active.png');
 }
+
+
+.alert 
+{
+    position: fixed;
+    width: 100%;
+    display: none !important;
+    bottom: 0;
+}
