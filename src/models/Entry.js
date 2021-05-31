@@ -15,7 +15,7 @@ class Entry {
         elem.removeAttribute("id"); 
         elem.querySelector('input').id = this.id;
         elem.querySelector('input').checked = this.isChecked;
-        elem.querySelector('label').setAttribute("for", this.id);
+        elem.querySelector('label').dataset.for = this.id; 
         elem.querySelector('label').textContent = this.text;
         elem.querySelector('.check-namer').dataset.for = this.id; 
         elem.querySelector('.check-delete-img').dataset.for = this.id; 

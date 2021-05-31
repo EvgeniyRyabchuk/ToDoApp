@@ -23,6 +23,15 @@ class App {
         }
     }
 
+    static getCurListByIndex()
+    {
+        for(let i of App.lists)
+        {
+            if(i.id == App.cur_focus_list)
+                return i; 
+        }
+    }
+
     static getEntryById(entryId)
     {
         const curList = this.getCurList(); 
@@ -62,6 +71,11 @@ class App {
             if(this.lists[i].id == id) 
                 this.lists.splice(i, 1);  
         }
+    }
+
+    static deleteAll()
+    {
+        App.lists = []; 
     }
 }
 

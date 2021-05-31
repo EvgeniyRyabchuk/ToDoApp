@@ -10,11 +10,6 @@ import { Entry, List, App } from './models';
  
 restore(); 
 
-window.onload = function()
-{
-    
-}
-
 function callAlert(type, content)
 {
     const collection = document.getElementById("alert-collection"); 
@@ -23,24 +18,24 @@ function callAlert(type, content)
     alert.querySelector(".alert-text").textContent = content; 
  
     setTimeout(() => { 
-        $(alert).fadeOut(300)
-
+        $(alert).fadeOut(1000)
     }, 3000)
 }
 
-// правильная загрузка скриптов 
 // ложная активация чекбоса 
-// бутстрап alert не появляется 
 
 // отображение чекбоксов другого списка  
 function toggleList()
 { 
     let content = App.getCurList().entryList; 
+    
     let field = document.querySelector("#field"); 
     field.innerHTML = ''; 
     
     for(let i of content)
         field.append(i.elem); 
+
+    document.getElementById(App.cur_focus_list).click(); 
 }
 // создаёт и возвращает placeholder-подсказку 
 function getFieldPlaceHolder()
@@ -106,6 +101,7 @@ document.getElementById("addEntry_btn").addEventListener("click", (e) =>
     curList.addEntry(entry);  
     console.log(entry.elem)
     entry.elem.addEventListener("dblclick", entrySectionClick); 
+    entry.elem.addEventListener("click", del_entry); 
     entry.elem.querySelector(".check-namer").addEventListener("blur", changeEntryName); 
 
     document.querySelector('#field').append(entry.elem);
@@ -155,14 +151,29 @@ document.getElementById("deleteList_btn").addEventListener("click", (e) =>
     if(confirm(`Вы  действительнохотите удалить список: ${App.cur_focus_list}`))
     {
         const deleted = App.getCurList(); 
+        const del_index = App.lists.indexOf(deleted); 
+
         App.deleteCurList(); 
         document.getElementById(deleted.id).remove(); 
         //document.getElementById("field").innerHTML = ""; 
         App.cur_focus_list = -1; 
         
         if(App.lists.length == 0)
-            document.getElementById("field").append(getFieldPlaceHolder()); 
+        {
+            let field = document.getElementById("field"); 
+            field.innerHTML = ''; 
+            field.append(getFieldPlaceHolder()); 
+        }
+        else
+        {
+            if(del_index < App.lists.length - 1) 
+                App.cur_focus_list = App.lists[del_index].id; 
+            else 
+                App.cur_focus_list = App.lists[del_index - 1].id; 
 
+            console.log(App.cur_focus_list);
+            toggleList(); 
+        }
         callAlert("alert-danger", `Вы удалили список ${deleted.title}`)
     }
 })
@@ -170,7 +181,13 @@ document.getElementById("deleteList_btn").addEventListener("click", (e) =>
 
 document.getElementById("deleteAll_btn").addEventListener("click", (e) =>
 {
+    document.getElementById("field").innerHTML = ''; 
+    document.getElementById("menu").innerHTML = ''; 
     localStorage.clear(); 
+    App.deleteAll(); 
+    field.append(getFieldPlaceHolder()); 
+    callAlert("alert-danger", `Все данные были удалены`);
+
 })
 
 function entrySectionClick(e)
@@ -183,7 +200,7 @@ function entrySectionClick(e)
    
     if(target.className == "form-check-label")
     {
-        const id = target.getAttribute("for");  
+        const id = target.dataset.for;  
         let entry = App.getEntryById(id); 
         let namer = document.querySelector(`input[data-for=\"${id}\"]`);    
         namer.value = entry.text; 
@@ -204,8 +221,10 @@ function entrySectionClick(e)
 
 function del_entry(e)
 {
+    console.log("lksjdgflsjldfjg")
     if(e.target.className == "check-delete-img")
     {
+        
         let id = e.target.dataset.for; 
         App.getCurList().deleteEntry(id); 
         let elem = e.target.closest('.form-check'); 
@@ -222,7 +241,7 @@ function changeEntryName(e)
     
     let entry = App.getEntryById(id); 
     entry.text = text; 
-    document.querySelector(`label[for=\"${id}\"]`).textContent = text; 
+    document.querySelector(`label[data-for=\"${id}\"]`).textContent = text; 
     e.target.style.display = "none"; 
 }
 

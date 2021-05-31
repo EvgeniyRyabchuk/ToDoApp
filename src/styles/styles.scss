@@ -21,18 +21,19 @@
 
 .check-namer
 {
+    // border: 0px;
     outline: none;
     display: none; 
     position: absolute;
-    box-sizing: border-box;
+    box-sizing: border-box; 
     display: none;
 }
 
 .check-namer:focus
 {
      outline: none;
-     border-width: 0 0 2px;
-     border-color: black; 
+     border-width: 0 0 0;
+    //  border-color: black; 
 }
 
 .form-check-label
@@ -75,10 +76,11 @@
 .check-delete-img
 {
     display: inline-block;
-    width: 18px;
-    height: 18px;
+    width: 24px;
+    height: 24px;
     background-size: cover;
     background-image: url('../assets/delete.png'); 
+    float: right;
 }
 .check-delete-img:hover
 {
@@ -86,6 +88,14 @@
     background-image: url('../assets/bin-active.png');
 }
 
+.form-check
+{
+    // display: flex;
+    // align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid gray;
+}
 
 .alert 
 {
@@ -93,4 +103,17 @@
     width: 100%;
     display: none !important;
     bottom: 0;
+}
+
+@media screen and (max-width: 768px) 
+{
+    #main-content
+    {
+        height: 100%; 
+    }
+    #field
+    {
+        padding-top: 30px;
+        height: 650px;
+    }
 }
