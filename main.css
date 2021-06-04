@@ -1,0 +1,172 @@
+@font-face {
+  font-family: "Roboto";
+  src: url(a8d6ac03c7b96b7acb6228ff2676139d.ttf) format("truetype");
+}
+.empty-menu-pl-hold, .empty-field-pl-hold {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  font-family: "Roboto";
+}
+
+.logo {
+  height: 108px;
+  width: 100px;
+  margin: 0 auto;
+  background-size: cover;
+  background-image: url(35cab9559ec9da5e1cda3fefef41ed18.png);
+}
+
+.stock {
+  display: none;
+}
+
+#title-list-text {
+  text-align: center;
+}
+
+.check-namer {
+  outline: none;
+  display: none;
+  position: absolute;
+  box-sizing: border-box;
+  display: none;
+}
+.check-namer:focus {
+  outline: none;
+  border-width: 0 0 0;
+}
+
+.menu-wrapper {
+  max-height: 650px;
+  overflow-y: scroll;
+}
+
+.form-check-label {
+  cursor: pointer;
+}
+
+#main-content {
+  position: relative;
+  height: 650px;
+}
+
+#field {
+  overflow-y: scroll;
+  max-height: 650px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px transparent;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7a7a7a;
+}
+
+.empty-field-pl-hold {
+  height: 100%;
+  background-color: #d8d8d8;
+}
+.empty-field-pl-hold .ph-msg {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+}
+.empty-field-pl-hold .ph-msg:after {
+  content: "";
+  border-bottom: 1px #000 solid;
+  display: block;
+}
+
+.empty-menu-pl-hold {
+  display: flex;
+  height: 100%;
+  transition: border 1s;
+  border: 3px dotted gray;
+}
+
+.no-entry-pl-hold {
+  display: none;
+  margin-top: 20px;
+  font-size: larger;
+  font-style: oblique;
+  text-align: center;
+}
+
+@keyframes showPH {}
+.check-delete-img {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-size: cover;
+  background-image: url(dba46e5bd2305aca9117ab0995ddf48c.png);
+  float: right;
+}
+.check-delete-img:hover {
+  cursor: pointer;
+  background-image: url(0f9e509f24f82ec7928ab41370d2ad96.png);
+}
+
+.form-check {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid gray;
+}
+
+.alert {
+  position: fixed;
+  width: 100%;
+  display: none !important;
+  bottom: 0;
+}
+
+#entrySelector {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+#entrySelector option {
+  font-size: 23px;
+}
+
+.entry-selector-wrapper {
+  height: 38px;
+}
+
+@media screen and (max-width: 1000px) {
+  .control-btn {
+    margin: 0 !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  #main-content {
+    height: 100%;
+  }
+
+  #field {
+    padding-top: 30px;
+    height: 650px;
+  }
+
+  .menu-wrapper {
+    max-height: 38px;
+  }
+}
