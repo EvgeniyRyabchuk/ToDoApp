@@ -19,7 +19,7 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addListModal">Add List</button>
                 <button class="btn btn-primary mx-1 control-btn" id="addEntry_btn">Add Entry</button>
-                <button class="btn btn-primary mx-1 control-btn" id="save_btn">Save</button>
+                <!-- <button class="btn btn-primary mx-1 control-btn" id="save_btn">Save</button> -->
                 <button class="btn btn-primary mx-1 control-btn" id="deleteList_btn" >Delete List</button>
                 <button class="btn btn-primary mx-1 control-btn" id="deleteAll_btn" >Delete All</button>
             </div>
@@ -28,10 +28,17 @@
         <div class="row" id="main-content">
             <div class="col-md-4 pl-2 menu-wrapper">
               <div class="empty-menu-pl-hold" >
-                <span class="ph-msg">
+                <span class="ph-msg"> 
                     Нет списков 
                 </span>
               </div> 
+              <div class="entry-selector-wrapper">
+                  <select id="entrySelector">
+                    <option value=";sldf  kj">dsfg</option>
+                    <option value="sdfgs">sdfhf</option>
+                    <option value="sdfgdsf">sdfghdfh</option>
+                  </select>
+              </div>
                 <div class="list-group" id="menu"> 
                   
                     <!-- <button class="btn btn-primary border-1 border-dark ">BTN1</button>
@@ -59,7 +66,7 @@
       <!-- Modal -->
       <div class="modal fade" id="addListModal" tabindex="-1" aria-labelledby="addListModal" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
+          <div class="modal-content"> 
             <div class="modal-header">
               <h5 class="modal-title" id="addListModal">Название списка</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

@@ -131,37 +131,39 @@ document.getElementById("addList_btn").addEventListener("click", (e) =>
 
 document.getElementById("addEntry_btn").addEventListener("click", (e) =>
 {
-   
-
-    let entry = new Entry("some text", true); 
-    let curList = App.getCurList(); 
-
-    curList.addEntry(entry);  
-    console.log(entry.elem)
-    entry.elem.addEventListener("dblclick", entrySectionClick); 
-    entry.elem.addEventListener("click", del_entry); 
-    entry.elem.querySelector(".check-namer").addEventListener("blur", changeEntryName); 
-    
-    if(curList.entryList.length == 1)
-        document.querySelector(".no-entry-pl-hold").remove(); 
-    
-    document.querySelector('#field').append(entry.elem);
-    
+    console.log(App.cur_focus_list); 
+    if(App.cur_focus_list)
+    {
+        let entry = new Entry("some text", true); 
+        let curList = App.getCurList(); 
+        
+        curList.addEntry(entry);  
+        console.log(entry.elem)
+        entry.elem.addEventListener("dblclick", entrySectionClick); 
+        entry.elem.addEventListener("click", del_entry); 
+        entry.elem.querySelector(".check-namer").addEventListener("blur", changeEntryName); 
+        
+        if(curList.entryList.length == 1)
+            document.querySelector(".no-entry-pl-hold").remove(); 
+        
+        document.querySelector('#field').append(entry.elem);
+    }
    
 })
 
-document.getElementById("save_btn").addEventListener("click", (e) =>
+window.onbeforeunload = function(e)
 {
     localStorage.setItem("lastSave", JSON.stringify(App.lists));
-    localStorage.setItem("lastFocus", App.cur_focus_list);
-    callAlert("alert-success", `Данные были сохранены`);
-})
+    localStorage.setItem("lastFocus", App.cur_focus_list); 
+    //callAlert("alert-success", `Данные были сохранены`); 
+    //return false;
+}
 
 function restore()
 {
     console.dir(JSON.parse(localStorage.getItem('lastSave'))); 
     const data = JSON.parse(localStorage.getItem('lastSave')); 
-    if(data) {
+    if(data.length > 0) {
         //App.cur_focus_list = localStorage.getItem("lastFocus");
         // инициализирую api объекты 
         for(let listData of data) 
@@ -183,10 +185,12 @@ function restore()
             App.addList(restoredList); 
             restoredList.elem.disabled = false; 
             document.getElementById("menu").append(restoredList.elem); 
+            toggleList(); 
         }
         document.querySelector(".empty-menu-pl-hold").remove(); 
     }
     else {
+        //document.querySelector(".menu-wrapper").append(getMenuPlaceHolder());
         //document.querySelector(".menu-wrapper").append(());      
         //ocument.querySelector(".empty-menu-pl-hold").style.display = 'flex';  
     } 
@@ -209,7 +213,7 @@ document.getElementById("deleteList_btn").addEventListener("click", (e) =>
             let field = document.getElementById("field"); 
             field.innerHTML = ''; 
             field.append(getFieldPlaceHolder()); 
-            
+            document.querySelector(".menu-wrapper").append(getMenuPlaceHolder()); 
         }
         else
         {
@@ -228,13 +232,22 @@ document.getElementById("deleteList_btn").addEventListener("click", (e) =>
 
 document.getElementById("deleteAll_btn").addEventListener("click", (e) =>
 {
-    document.getElementById("field").innerHTML = ''; 
-    document.getElementById("menu").innerHTML = ''; 
+    if(App.lists.length == 0)
+        return; 
+    
+    let field = document.getElementById("field"); 
+    let menu = document.getElementById("menu"); 
+    let menuWrapper = document.querySelector(".menu-wrapper");
+     
     localStorage.clear(); 
     App.deleteAll(); 
-    field.append(getFieldPlaceHolder()); 
-    callAlert("alert-danger", `Все данные были удалены`);
+    field.innerHTML = ''; 
+    menu.innerHTML = ''; 
 
+    field.append(getFieldPlaceHolder()); 
+    menuWrapper.append(getMenuPlaceHolder()); 
+
+    callAlert("alert-danger", `Все данные были удалены`);
 })
 
 function entrySectionClick(e)
@@ -287,10 +300,18 @@ function changeEntryName(e)
 {
     const text = e.target.value; 
     const id = e.target.dataset.for; 
-    
-    let entry = App.getEntryById(id); 
-    entry.text = text; 
-    document.querySelector(`label[data-for=\"${id}\"]`).textContent = text; 
+    let lable = document.querySelector(`label[data-for=\"${id}\"]`); 
+
+    if(text)
+    {
+        let entry = App.getEntryById(id); 
+        entry.text = text; 
+        lable.textContent = text; 
+    }
+    else
+    {
+        alert("Введите текст для записи");  
+    }
     e.target.style.display = "none"; 
 }
 

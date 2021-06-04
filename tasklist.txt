@@ -1,5 +1,3 @@
-Проверка на пустоту 
 Адаптивный дизайн 
-.ph-msg:after{content:''; border-bottom:1px #000 solid; display:block; margin-top: -8px}
-Сохранение при выходе 
 Добавить иконку 
+Внешний вид 

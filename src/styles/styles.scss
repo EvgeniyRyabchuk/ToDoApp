@@ -57,8 +57,12 @@ body
     }
 }
 
-
-
+//#menu { height: 100%; }
+.menu-wrapper
+{
+    max-height: 650px;
+    overflow-y: scroll;
+}
 .form-check-label
 {
     cursor: pointer;
@@ -71,28 +75,36 @@ body
     
 }
 
-// @keyframes anime {
-//     from
-//     {
-//         opacity: 0;
-//     }
-//     to
-//     {
-//         opacity: 1;
-//     }
-// }
 
+#field { overflow-y: scroll;  max-height: 650px;} 
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+  
+  /* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px transparent; 
+    border-radius: 10px;
+}
+   
+  /* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(207, 207, 207); 
+    border-radius: 10px;
+}
+  
+  /* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(122, 122, 122); 
+}
 .empty-field-pl-hold
 {
     height: 100%;
     background-color: rgb(216, 216, 216);
-    // opacity: 0;
-    // @extend %center-content; 
-    // animation-name: anime;
-    // animation-duration: 1s;
-    // animation-timing-function:ease-in;
-    // animation-iteration-count: 1;
-    // animation-delay: 1s;
+    @extend %center-content; 
+
     .ph-msg
     {
         font-family: Arial, Helvetica, sans-serif; 
@@ -106,7 +118,7 @@ body
 {
     display: flex;
     height: 100%; 
-    @extend %center-content;
+    @extend %center-content; 
     transition: border 1s;
     border: 3px dotted gray; 
 } 
@@ -156,6 +168,22 @@ body
     display: none !important;
     bottom: 0;
 }
+
+#entrySelector 
+{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+#entrySelector option
+{
+    font-size: 23px;
+    
+}
+.entry-selector-wrapper
+{
+    height: 38px;
+}
 @media screen and (max-width: 1000px) 
 {
     .control-btn
@@ -174,5 +202,8 @@ body
         padding-top: 30px;
         height: 650px;
     }
-    
+    .menu-wrapper
+    {
+        max-height: 38px;
+    }
 }
