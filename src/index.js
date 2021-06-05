@@ -150,7 +150,7 @@ document.getElementById("addList_btn").addEventListener("click", (e) =>
 {
     let text = document.querySelector("#title-list-text").value; 
     text = text.length == 0 ? `New List ${List.maxId+1}` : text;  
-    
+
     console.log(text); 
     let list = new List(text); 
     App.addList(list); 
@@ -227,7 +227,7 @@ function restore()
             document.getElementById("menu").append(restoredList.elem); 
             addListToSelect(listData);
         }
-
+        document.querySelector(".list-selector-wrapper").style.display = 'block'; 
         List.maxId = JSON.parse(localStorage.getItem('maxListId')); 
         Entry.maxId = JSON.parse(localStorage.getItem('maxEntryId')); 
         App.cur_focus_list = localStorage.getItem("lastFocus"); 
