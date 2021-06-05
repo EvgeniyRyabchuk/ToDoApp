@@ -57,11 +57,14 @@ body
     }
 }
 
-//#menu { height: 100%; }
-.menu-wrapper
-{
+#menu {
     max-height: 650px;
     overflow-y: scroll;
+ }
+.menu-wrapper
+{
+    // max-height: 650px;
+    // overflow-y: scroll;
 }
 .form-check-label
 {
@@ -169,21 +172,38 @@ body
     bottom: 0;
 }
 
-#entrySelector 
+// не работет option hover 
+// не выводит hight до конца 
+
+#listSelector 
 {
     width: 100%;
     height: 100%;
-    cursor: pointer;
-}
-#entrySelector option
-{
-    font-size: 23px;
     
+    cursor: pointer;
+    text-align-last:center;
+    & option
+    {
+        font-size: 23px;
+        background-color: white;
+     
+    }
+    option:hover {
+        background: rgb(131, 22, 22);
+    }
+    &:hover
+    {
+        background-color: rgb(204, 204, 204);
+    }
 }
-.entry-selector-wrapper
+
+.list-selector-wrapper
 {
     height: 38px;
+    margin-bottom: 5px;
 }
+
+
 @media screen and (max-width: 1000px) 
 {
     .control-btn
@@ -205,5 +225,9 @@ body
     .menu-wrapper
     {
         max-height: 38px;
+    }
+    #menu
+    {
+        display: none;
     }
 }

@@ -15,6 +15,7 @@ class List {
         let button = document.createElement('button');
         button.id = this.id; 
         button.className = "btn btn-primary border-1 border-dark"; 
+        button.style.marginRight = "5px";
         button.textContent = this.title; 
         return button; 
     }

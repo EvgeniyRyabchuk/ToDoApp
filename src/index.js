@@ -7,7 +7,6 @@ import '..//node_modules/bootstrap/dist/js/bootstrap.bundle';
 import { Entry, List, App } from './models';
 
 
- 
 restore(); 
 
 function callAlert(type, content)
@@ -36,8 +35,11 @@ function toggleList()
         field.append(i.elem); 
 
     document.getElementById(App.cur_focus_list).click(); 
+    document.getElementById("listSelector").value = App.cur_focus_list; 
+    document.getElementById(App.cur_focus_list).disabled = true; 
 
-    return content.length; 
+    if(content.length == 0)
+        document.getElementById("field").append(getNoEntryPlaceHolder()); 
 }
 // создаёт и возвращает placeholder-подсказку 
 function getFieldPlaceHolder()
@@ -74,6 +76,54 @@ function getNoEntryPlaceHolder()
     return div; 
 }
 
+function addListToSelect(list)
+{
+    let select = document.getElementById("listSelector"); 
+    let option = document.createElement("option"); 
+    option.value = list.id; 
+    option.innerText = list.title; 
+    select.append(option);    
+}
+
+
+function delSelectList(id)
+{
+    let select = document.getElementById("listSelector"); 
+    select.querySelector(`option[value=\"${id}\"]`).remove();  
+}
+
+function clearSelectList()
+{
+    let select = document.getElementById("listSelector"); 
+    select.innerHTML = ""; 
+}
+
+
+function selectListChange(id)
+{
+    if(App.cur_focus_list != -1 && App.cur_focus_list != undefined)
+    {
+        let prev = document.querySelector(`#${App.cur_focus_list}`); 
+        prev.disabled = false; 
+    }
+    
+    App.cur_focus_list = id; 
+    let btn = document.querySelector(`#${id}`); 
+    btn.disabled = true;  
+    console.dir(btn);
+
+    
+    toggleList(); 
+    return btn; 
+}
+
+document.getElementById("listSelector").addEventListener("change", (e)=>
+{
+    let btn = selectListChange(e.target.value);  
+    let menuWrapper = document.querySelector("#menu");
+    menuWrapper.scrollTop = btn.offsetTop - (btn.offsetHeight + 5); 
+    
+})
 
 document.getElementById("menu").addEventListener("click", (e) =>
 {
@@ -82,21 +132,8 @@ document.getElementById("menu").addEventListener("click", (e) =>
     
     if(target.tagName == "BUTTON")
     {
-        console.log(App.cur_focus_list); 
-        if(App.cur_focus_list != -1 && App.cur_focus_list != undefined)
-        {
-            console.log(App.cur_focus_list)
-            let prev = document.querySelector(`#${App.cur_focus_list}`); 
-            prev.disabled = false; 
-        }
-        
-        App.cur_focus_list = target.id; 
-        target.disabled = true;  
-        const entry_count = toggleList(); 
-        if(entry_count == 0)
-            document.querySelector("#field").append(getNoEntryPlaceHolder());   
-
-        //document.querySelector(".empty-field-pl-hold").style.display = 'none';  
+        selectListChange(target.id);  
+       
     }
 })
 
@@ -105,14 +142,14 @@ document.querySelector("button[data-bs-target=\"#addListModal\"]")
 .addEventListener("click", () =>
 {
     let elem = document.querySelector("#title-list-text");
-    elem.placeholder = `New List ${App.lists.length+1}` 
+    elem.placeholder = `New List ${List.maxId+1}` 
 
 })
 
 document.getElementById("addList_btn").addEventListener("click", (e) =>
 {
     let text = document.querySelector("#title-list-text").value; 
-    text = text.length == 0 ? `New List ${App.lists.length+1}` : text;  
+    text = text.length == 0 ? `New List ${List.maxId+1}` : text;  
     
     console.log(text); 
     let list = new List(text); 
@@ -124,9 +161,10 @@ document.getElementById("addList_btn").addEventListener("click", (e) =>
         document.querySelector(".empty-menu-pl-hold").remove(); 
         document.querySelector(".empty-field-pl-hold").remove();
         document.querySelector("#field").append(getNoEntryPlaceHolder()); 
+        document.querySelector(".list-selector-wrapper").style.display = 'block'; 
     }
     
-
+    addListToSelect(list); 
 })
 
 document.getElementById("addEntry_btn").addEventListener("click", (e) =>
@@ -155,6 +193,8 @@ window.onbeforeunload = function(e)
 {
     localStorage.setItem("lastSave", JSON.stringify(App.lists));
     localStorage.setItem("lastFocus", App.cur_focus_list); 
+    localStorage.setItem("maxListId", List.maxId); 
+    localStorage.setItem("maxEntryId", Entry.maxId);  
     //callAlert("alert-success", `Данные были сохранены`); 
     //return false;
 }
@@ -164,7 +204,7 @@ function restore()
     console.dir(JSON.parse(localStorage.getItem('lastSave'))); 
     const data = JSON.parse(localStorage.getItem('lastSave')); 
     if(data.length > 0) {
-        //App.cur_focus_list = localStorage.getItem("lastFocus");
+       
         // инициализирую api объекты 
         for(let listData of data) 
         {
@@ -185,11 +225,22 @@ function restore()
             App.addList(restoredList); 
             restoredList.elem.disabled = false; 
             document.getElementById("menu").append(restoredList.elem); 
-            toggleList(); 
+            addListToSelect(listData);
         }
+
+        List.maxId = JSON.parse(localStorage.getItem('maxListId')); 
+        Entry.maxId = JSON.parse(localStorage.getItem('maxEntryId')); 
+        App.cur_focus_list = localStorage.getItem("lastFocus"); 
+
+        localStorage.setItem("maxListId", List.maxId); 
+        localStorage.setItem("maxEntryId", Entry.maxId);  
+
+        toggleList(); 
         document.querySelector(".empty-menu-pl-hold").remove(); 
+       
     }
     else {
+        document.querySelector("#field").append(getFieldPlaceHolder()); 
         //document.querySelector(".menu-wrapper").append(getMenuPlaceHolder());
         //document.querySelector(".menu-wrapper").append(());      
         //ocument.querySelector(".empty-menu-pl-hold").style.display = 'flex';  
@@ -205,6 +256,7 @@ document.getElementById("deleteList_btn").addEventListener("click", (e) =>
 
         App.deleteCurList(); 
         document.getElementById(deleted.id).remove(); 
+        delSelectList(deleted.id); 
         //document.getElementById("field").innerHTML = ""; 
         App.cur_focus_list = -1; 
         
@@ -214,6 +266,7 @@ document.getElementById("deleteList_btn").addEventListener("click", (e) =>
             field.innerHTML = ''; 
             field.append(getFieldPlaceHolder()); 
             document.querySelector(".menu-wrapper").append(getMenuPlaceHolder()); 
+            document.querySelector(".list-selector-wrapper").style.display = 'none'; 
         }
         else
         {
@@ -240,13 +293,17 @@ document.getElementById("deleteAll_btn").addEventListener("click", (e) =>
     let menuWrapper = document.querySelector(".menu-wrapper");
      
     localStorage.clear(); 
+    clearSelectList(); 
     App.deleteAll(); 
+    List.maxId = 0; 
+    Entry.maxId = 0; 
+
     field.innerHTML = ''; 
     menu.innerHTML = ''; 
 
     field.append(getFieldPlaceHolder()); 
     menuWrapper.append(getMenuPlaceHolder()); 
-
+    document.querySelector(".list-selector-wrapper").style.display = 'none'; 
     callAlert("alert-danger", `Все данные были удалены`);
 })
 
