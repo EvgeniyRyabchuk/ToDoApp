@@ -21,6 +21,8 @@
 body
 {
     font-family: 'Roboto';
+    padding: 0;
+    margin: 0;
 }
 
 .logo {
@@ -59,7 +61,8 @@ body
 
 #menu {
     max-height: 650px;
-    overflow-y: scroll;
+   // overflow-y: scroll;
+   
  }
 .menu-wrapper
 {
@@ -221,8 +224,10 @@ body
     }
     #field
     {
-        padding-top: 30px;
+        padding-top: 20px;
         height: 650px;
+        padding-left: 8px;
+        padding-right: 0px;
     }
     .menu-wrapper
     {

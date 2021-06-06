@@ -163,7 +163,10 @@ document.getElementById("addList_btn").addEventListener("click", (e) =>
         document.querySelector("#field").append(getNoEntryPlaceHolder()); 
         document.querySelector(".list-selector-wrapper").style.display = 'block'; 
     }
-    
+    if(App.list.length > 17)
+       document.getElementById("menu").style.overflowY =  "scroll";
+    else
+        document.getElementById("menu").style.overflowY =  "hidden";
     addListToSelect(list); 
 })
 
@@ -199,53 +202,49 @@ window.onbeforeunload = function(e)
     //return false;
 }
 
-function restore()
-{
-    console.dir(JSON.parse(localStorage.getItem('lastSave'))); 
-    const data = JSON.parse(localStorage.getItem('lastSave')); 
-    if(data.length > 0) {
-       
-        // инициализирую api объекты 
-        for(let listData of data) 
-        {
-            let restoredList = new List(listData.title); 
-            restoredList.id = listData.id; 
-            restoredList.elem = restoredList.createElement(); 
-            for(let entryData of listData.entryList)
-            {
-                let restoredEntry = new Entry(entryData.text, entryData.isChecked); 
-                restoredEntry.id = entryData.id; 
-                restoredEntry.elem = restoredEntry.createElement(); 
-                restoredEntry.elem.addEventListener("dblclick", entrySectionClick); 
-                restoredEntry.elem.addEventListener("click", del_entry); 
-                restoredEntry.elem.querySelector(".check-namer").addEventListener("blur", changeEntryName); 
-                restoredList.addEntry(restoredEntry); 
+function restore() {
+    console.dir(JSON.parse(localStorage.getItem('lastSave')));
+    const data = JSON.parse(localStorage.getItem('lastSave'));
+    if (data && data.length > 0) {
+
+        for (let listData of data) {
+            let restoredList = new List(listData.title);
+            restoredList.id = listData.id;
+            restoredList.elem = restoredList.createElement();
+            for (let entryData of listData.entryList) {
+                let restoredEntry = new Entry(entryData.text, entryData.isChecked);
+                restoredEntry.id = entryData.id;
+                restoredEntry.elem = restoredEntry.createElement();
+                restoredEntry.elem.addEventListener("dblclick", entrySectionClick);
+                restoredEntry.elem.addEventListener("click", del_entry);
+                restoredEntry.elem.querySelector(".check-namer").addEventListener("blur", changeEntryName);
+                restoredList.addEntry(restoredEntry);
             }
-            
-            App.addList(restoredList); 
-            restoredList.elem.disabled = false; 
-            document.getElementById("menu").append(restoredList.elem); 
+
+            App.addList(restoredList);
+            restoredList.elem.disabled = false;
+            document.getElementById("menu").append(restoredList.elem);
             addListToSelect(listData);
         }
-        document.querySelector(".list-selector-wrapper").style.display = 'block'; 
-        List.maxId = JSON.parse(localStorage.getItem('maxListId')); 
-        Entry.maxId = JSON.parse(localStorage.getItem('maxEntryId')); 
-        App.cur_focus_list = localStorage.getItem("lastFocus"); 
+        document.querySelector(".list-selector-wrapper").style.display = 'block';
+        List.maxId = JSON.parse(localStorage.getItem('maxListId'));
+        Entry.maxId = JSON.parse(localStorage.getItem('maxEntryId'));
+        App.cur_focus_list = localStorage.getItem("lastFocus");
 
-        localStorage.setItem("maxListId", List.maxId); 
-        localStorage.setItem("maxEntryId", Entry.maxId);  
+        localStorage.setItem("maxListId", List.maxId);
+        localStorage.setItem("maxEntryId", Entry.maxId);
 
-        toggleList(); 
-        document.querySelector(".empty-menu-pl-hold").remove(); 
-       
-    }
-    else {
-        document.querySelector("#field").append(getFieldPlaceHolder()); 
+        toggleList();
+        document.querySelector(".empty-menu-pl-hold").remove();
+
+    } else {
+        document.querySelector("#field").append(getFieldPlaceHolder());
         //document.querySelector(".menu-wrapper").append(getMenuPlaceHolder());
         //document.querySelector(".menu-wrapper").append(());      
         //ocument.querySelector(".empty-menu-pl-hold").style.display = 'flex';  
-    } 
+    }
 }
+
 
 document.getElementById("deleteList_btn").addEventListener("click", (e) =>
 {
