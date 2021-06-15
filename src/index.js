@@ -34,12 +34,12 @@ function toggleList()
     for(let i of content)
         field.append(i.elem); 
 
-    document.getElementById(App.cur_focus_list).click(); 
+    document.getElementById(App.cur_focus_list).disabled = true;  
     document.getElementById("listSelector").value = App.cur_focus_list; 
     document.getElementById(App.cur_focus_list).disabled = true; 
-
+    
     if(content.length == 0)
-        document.getElementById("field").append(getNoEntryPlaceHolder()); 
+        document.getElementById("field").append(getNoEntryPlaceHolder());  
 }
 // создаёт и возвращает placeholder-подсказку 
 function getFieldPlaceHolder()
@@ -163,8 +163,8 @@ document.getElementById("addList_btn").addEventListener("click", (e) =>
         document.querySelector("#field").append(getNoEntryPlaceHolder()); 
         document.querySelector(".list-selector-wrapper").style.display = 'block'; 
     }
-    if(App.list.length > 17)
-       document.getElementById("menu").style.overflowY =  "scroll";
+    if(App.lists.length > 17)
+       document.getElementById("menu").style.overflowY =  "scroll"; 
     else
         document.getElementById("menu").style.overflowY =  "hidden";
     addListToSelect(list); 
@@ -203,6 +203,7 @@ window.onbeforeunload = function(e)
 }
 
 function restore() {
+
     console.dir(JSON.parse(localStorage.getItem('lastSave')));
     const data = JSON.parse(localStorage.getItem('lastSave'));
     if (data && data.length > 0) {
@@ -258,7 +259,7 @@ document.getElementById("deleteList_btn").addEventListener("click", (e) =>
         delSelectList(deleted.id); 
         //document.getElementById("field").innerHTML = ""; 
         App.cur_focus_list = -1; 
-        
+        // если списков не осталось вывожу плэйсхолдеры 
         if(App.lists.length == 0)
         {
             let field = document.getElementById("field"); 
@@ -269,16 +270,23 @@ document.getElementById("deleteList_btn").addEventListener("click", (e) =>
         }
         else
         {
+            // если у удаленого списка есть другие после него 
             if(del_index < App.lists.length - 1) 
                 App.cur_focus_list = App.lists[del_index].id; 
             else 
                 App.cur_focus_list = App.lists[del_index - 1].id; 
+           
 
-            console.log(App.cur_focus_list);
-            toggleList(); 
+            if(deleted.entryList.length === 0) 
+                document.querySelector(".no-entry-pl-hold").remove(); 
+
+            toggleList();
         }
+     
+            
         callAlert("alert-danger", `Вы удалили список ${deleted.title}`)
     }
+
 })
 
 
